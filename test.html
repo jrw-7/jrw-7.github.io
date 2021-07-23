@@ -1,0 +1,93 @@
+<html>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<style> circle {fill: lightblue; stroke: black;} </style>
+<body onload='init()'>
+<svg width=700 height=700>
+    <rect x=80 y=100 width=60 height=20></rect>
+    <text x="100" y="200">A</text>
+</svg>
+<script>
+async function init() {
+//
+const dat = await d3.csv('https://jrw-7.github.io/nba_bulls_data3.csv');
+
+var data = dat.filter(filterCriteria);
+
+function filterCriteria(d) {
+    return (d.Season === "1981" ||
+      d.Season === "1982" ||
+      d.Season === "1983" ||
+      d.Season === "1984" ||
+      d.Season === "1985" ||
+      d.Season === "1986" ||
+      d.Season === "1987")
+      ;
+}
+
+  // When reading the csv, I must format variables:
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 80, bottom: 30, left: 90},
+    width = 770 - margin.left - margin.right,
+    height = 700 - margin.top - margin.bottom;
+
+
+// Add X axis --> YEAR
+var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return new Date(parseInt(d.Season),0); }))
+      .range([ 0, width ]);
+
+// Add Y axis
+var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return d.value; })])
+      .range([ height, 0 ]);
+
+
+
+d3.select('svg').append("g")
+  .attr("transform", "translate(50,50)")
+  .selectAll('circle')
+  .data(data)
+  .enter()
+  .append('circle')
+    .attr("cx", function(d) { return x(new Date(parseInt(d.Season),0)); })
+    .attr("cy", function(d) { return y(d.value); })
+    .attr("r", function(d) { return 4; });
+
+d3.select('svg').append("g")
+  .attr("transform", "translate(50,50)")
+    // Add the line
+  .append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(new Date(parseInt(d.Season),0)); })
+        .y(function(d) { return y(d.value) })
+        )
+
+
+
+
+//X
+d3.select("svg").append("g")
+      .attr("transform", "translate(50,660)")
+      //.attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
+//Y
+d3.select("svg").append("g")
+    .attr("transform", "translate(50,0)")
+    .call(d3.axisLeft(y).tickFormat(function (d){
+    return d3.format(".3f")(d/10);}));
+
+
+
+}
+
+d3.select("rect").attr("height","10")
+d3.select("text").text("Hello World");
+
+</script>
+</body>
+</html>

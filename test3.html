@@ -1,0 +1,159 @@
+<html>
+
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<style> circle {fill: lightblue; stroke: black;} </style>
+
+<style>
+.chart rect { fill: steelblue; }
+#tooltip {
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: white;
+    border: 0px;
+    pointer-events: none;
+}
+</style>
+
+
+<body onload='init()'>
+<h1>Chicago Bulls </h1>
+
+<p>A look back at the season.</p>
+<svg width=900 height=700></svg>
+
+<div id="tooltip"></div>
+
+<script>
+
+async function init() {
+
+    var tooltip = d3.select("#tooltip");
+//
+const dat = await d3.csv('https://jrw-7.github.io/nba_bulls_data3.csv');
+
+var data = dat.filter(filterCriteria);
+
+function filterCriteria(d) {
+    return d.Season;
+}
+
+  // When reading the csv, I must format variables:
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 80, bottom: 30, left: 90},
+    width = 770 - margin.left - margin.right,
+    height = 700 - margin.top - margin.bottom;
+
+
+// Add X axis --> YEAR
+var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return new Date(parseInt(d.Season),0); }))
+      .range([ 0, width ]);
+
+// Add Y axis
+var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return d.value; })])
+      .range([ height, 0 ]);
+
+d3.select('svg').append("g")
+  .attr("transform", "translate(50,50)")
+  .selectAll('circle')
+  .data(data)
+  .enter()
+  .append('circle')
+    .attr("cx", function(d) { return x(new Date(parseInt(d.Season),0)); })
+    .attr("cy", function(d) { return y(d.value); })
+    .attr("r", function(d) { return 6; })
+    .on("mouseover", function(d,i) {
+        tooltip.style("opacity", 1)
+               .style("left",(d3.event.pageX)+"px")
+               .style("top",(d3.event.pageY)+"px")
+               .html("Win/Loss: "+ d.value +
+               "<br> Year: " + d.Season + "<br> Coaches: " + d.Coaches
+               + "<br> FG%: " + d.Coaches
+
+
+               );
+    })
+    .on("mouseout", function() { tooltip.style("opacity", 0) })
+
+
+d3.select('svg').append("g")
+  .attr("transform", "translate(50,50)")
+    // Add the line
+  .append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(new Date(parseInt(d.Season),0)); })
+        .y(function(d) { return y(d.value) })
+        )
+
+
+//X
+d3.select("svg").append("g")
+      .attr("transform", "translate(50,660)")
+      //.attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
+//Y
+d3.select("svg").append("g")
+    .attr("transform", "translate(50,0)")
+    .call(d3.axisLeft(y).tickFormat(function (d){
+    return d3.format(".3f")(d);}));
+
+
+//d3.select("rect").attr("height","10")
+d3.select("svg").append("text")
+      .text("Michael Jordan is drafted...")
+          .attr("transform", "translate(0, 50)")
+    .attr("x", x(new Date(parseInt("1984"),0)))
+    .attr("y", 500);
+
+
+d3.select("svg").append("line")
+    .style("stroke", "black")
+    .style("stroke-width", 1)
+    .attr("transform", "translate(50, 50)")
+    .attr("x1", x(new Date(parseInt("1984"),0)))
+    .attr("y1", y(.463))
+    .attr("x2", x(new Date(parseInt("1984"),0)))
+    .attr("y2", 480);
+
+d3.select("svg").append("text")
+      .text("Win first NBA Championship")
+    .attr("x", x(new Date(parseInt("1990"),0)))
+    .attr("y", 600);
+
+d3.select("svg").append("line")
+    .style("stroke", "black")
+    .style("stroke-width", 1)
+    .attr("transform", "translate(50, 50)")
+    .attr("x1", x(new Date(parseInt("1990"),0)))
+    .attr("y1", y(.744))
+    .attr("x2", x(new Date(parseInt("1990"),0)))
+    .attr("y2", 540);
+
+
+d3.select("svg").append("text")
+      .text("MJ retires for good; Coach Jackson leaves.")
+    .attr("x", x(new Date(parseInt("1998"),0)))
+    .attr("y", 650);
+
+d3.select("svg").append("line")
+    .style("stroke", "black")
+    .style("stroke-width", 1)
+    .attr("transform", "translate(50, 50)")
+    .attr("x1", x(new Date(parseInt("1998"),0)))
+    .attr("y1", y(.260))
+    .attr("x2", x(new Date(parseInt("1998"),0)))
+    .attr("y2", 590);
+}
+
+</script>
+</body>
+</html>

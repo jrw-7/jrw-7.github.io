@@ -73,8 +73,8 @@ function filterCriteria(d) {
 }
 
 // set the dimensions and margins of the graph
-var width = 800,
-    height = 800;
+var width = 700,
+    height = 700;
 
 
 // Define X Axis 
@@ -84,12 +84,12 @@ var x = d3.scaleTime()
 
 // Define Y axis
 var y = d3.scaleLinear()
-      .domain([0, 0.9])
+      .domain([0.1, 0.9])
       .range([ height, 0 ]);
 
 // Add X Axis
 d3.select("svg").append("g")
-      .attr("transform", "translate(100,850)")
+      .attr("transform", "translate(100, 750)")
       .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
 
 // Add Y Axis
@@ -162,7 +162,19 @@ d3.select("svg").append("line")
     .attr("y1", 395)
     .attr("x2", x(new Date(parseInt("1984"),0)))
     .attr("y2", 600);
+
+
+// 0.500 Win/Loss Reference Line
+d3.select("svg").append("line")
+    .style("stroke", "red")
+    .style("stroke-dasharray", 10)
+    .attr("transform", "translate(100, 50)")
+    .attr("x1", 0)
+    .attr("y1", y(0.500))
+    .attr("x2", 900)
+    .attr("y2", y(0.500));
 }
+
 
 </script>
 </body>

@@ -1,10 +1,10 @@
 <html>
 
 <script src='https://d3js.org/d3.v5.min.js'></script>
-<style> circle {fill: lightblue; stroke: black;} </style>
 
 <style>
-.chart rect { fill: steelblue; }
+circle {fill: lightblue; stroke: black;} 
+
 #tooltip {
     position: absolute;			
     width: 200px;					
@@ -15,10 +15,19 @@
     border: 0px;		
     pointer-events: none;
 }
+
+.button_press
+{
+	background-color: black;
+	color: white;
+	width: 75px;
+	height: 21px;
+}
+
 </style>
 
-
 <body onload='init()'>
+
 <h1>The Rise and Fall of the Chicago Bulls 1978-2003</h1>
 
 <p>
@@ -27,11 +36,11 @@ percentage about 0.500. The organization decided it was time for a big change, a
 that change came when they decided to draft Michael Jordan in 1984. But management
 wasn't done with changes to continue to improve their record.
 </p>
-<a href='https://jrw-7.github.io/index.html'><button>Scene 1</button></a>
+
+<a href='https://jrw-7.github.io/index.html'><button class="button_press">Scene 1</button></a>
 <a href='https://jrw-7.github.io/test2.html'><button>Scene 2</button></a>
 <a href='https://jrw-7.github.io/test3.html'><button>Scene 3</button></a>
 <br>
-</br>
 <svg width=1000 height=1000></svg>
 
 <div id="tooltip"></div>
@@ -40,12 +49,13 @@ wasn't done with changes to continue to improve their record.
 
 async function init() {
     
-    var tooltip = d3.select("#tooltip");
-//
-const dat = await d3.csv('https://jrw-7.github.io/nba_bulls_csv_final.csv');
+var tooltip = d3.select("#tooltip");
 
-var data = dat.filter(filterCriteria);
+const dataFile = await d3.csv('https://jrw-7.github.io/nba_bulls_csv_final.csv');
 
+var data = dataFile.filter(filterCriteria);
+
+// Filter for certain years.
 function filterCriteria(d) {
     return (
       d.Season === "1978" || 
@@ -62,25 +72,47 @@ function filterCriteria(d) {
       ;
 }
 
-  // When reading the csv, I must format variables:
-
 // set the dimensions and margins of the graph
 var width = 800,
     height = 800;
 
 
-// Add X axis --> YEAR
+// Define X Axis 
 var x = d3.scaleTime()
       .domain(d3.extent(data, function(d) { return new Date(parseInt(d.Season),0); }))
       .range([ 0, width ]);
 
-// Add Y axis
+// Define Y axis
 var y = d3.scaleLinear()
       .domain([0, 0.9])
       .range([ height, 0 ]);
 
+// Add X Axis
+d3.select("svg").append("g")
+      .attr("transform", "translate(100,850)")
+      .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
+
+// Add Y Axis
+d3.select("svg").append("g")
+    .attr("transform", "translate(100,50)")
+    .call(d3.axisLeft(y).tickFormat(function (d){
+    return d3.format(".3f")(d);}));
+
+// X Axis Label
+d3.select("svg").append("text")
+      .text("W/L %")
+    .attr("x", 0)
+    .attr("y", 400);
+
+// Y Axis Label
+d3.select("svg").append("text")
+      .text("Season (Year)")
+    .attr("x", 500)
+    .attr("y", 950);
+
+// Add circles
 d3.select('svg').append("g")
-  .attr("transform", "translate(100,100)")
+  .attr("transform", "translate(100,50)")
   .selectAll('circle')
   .data(data)
   .enter()
@@ -100,11 +132,10 @@ d3.select('svg').append("g")
                );
     })
     .on("mouseout", function() { tooltip.style("opacity", 0) })
-    
 
+// Add line    
 d3.select('svg').append("g")
-  .attr("transform", "translate(100,100)")
-    // Add the line
+  .attr("transform", "translate(100,50)")
   .append("path")
       .datum(data)
       .attr("fill", "none")
@@ -115,52 +146,24 @@ d3.select('svg').append("g")
         .y(function(d) { return y(d.Win_Loss_Percent) })
         )
 
-
-
-
-//X
-d3.select("svg").append("g")
-      .attr("transform", "translate(100,900)")
-      .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
-//Y
-d3.select("svg").append("g")
-    .attr("transform", "translate(100,100)")
-    .call(d3.axisLeft(y).tickFormat(function (d){
-    return d3.format(".3f")(d);}));
-
-// Annotation
+// Annotation Text
 d3.select("svg").append("text")
       .text("Michael Jordan is drafted.")
-          .attr("transform", "translate(50, 100)")
+          .attr("transform", "translate(50, 50)")
     .attr("x", x(new Date(parseInt("1984"),0)))
     .attr("y", 620);
     
-
+// Annotation Line
 d3.select("svg").append("line")
     .style("stroke", "black")
     .style("stroke-width", 1)
-    .attr("transform", "translate(100, 100)")
+    .attr("transform", "translate(100, 50)")
     .attr("x1", x(new Date(parseInt("1984"),0)))
     .attr("y1", 395)
     .attr("x2", x(new Date(parseInt("1984"),0)))
     .attr("y2", 600);
-
-// X Axis Label
-d3.select("svg").append("text")
-      .text("W/L %")
-    .attr("x", 0)
-    .attr("y", 400);
-
-// Y Axis Label
-d3.select("svg").append("text")
-      .text("Season (Year)")
-    .attr("x", 500)
-    .attr("y", 950);
-    
 }
 
 </script>
 </body>
 </html>
-
-

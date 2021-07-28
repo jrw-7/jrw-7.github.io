@@ -125,10 +125,10 @@ d3.select('svg').append("g")
                .style("left",(d3.event.pageX)+"px")
                .style("top",(d3.event.pageY)+"px")
                .html("Win/Loss: "+ d.Win_Loss_Percent + 
-               "<br> Year: " + d.Season + "<br> Coaches: " + d.Coaches
-               + "<br> FG%: " + d.Coaches
-               
-               
+               "<br> Year: " + d.Season + "<br> Head Coach(es): " + d.Coaches
+               + "<br> Top Player: " + d.Top_WS
+               + "<br> Offensive Rating: " + d.ORtg
+               + "<br> Defensive Rating: " + d.DRtg
                );
     })
     .on("mouseout", function() { tooltip.style("opacity", 0) })

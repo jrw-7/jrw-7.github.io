@@ -73,8 +73,8 @@ function filterCriteria(d) {
 }
 
 // set the dimensions and margins of the graph
-var width = 700,
-    height = 700;
+var width = 650,
+    height = 650;
 
 
 // Define X Axis 
@@ -89,7 +89,7 @@ var y = d3.scaleLinear()
 
 // Add X Axis
 d3.select("svg").append("g")
-      .attr("transform", "translate(100, 720)")
+      .attr("transform", "translate(100, 670)")
       .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
 
 // Add Y Axis
@@ -100,15 +100,15 @@ d3.select("svg").append("g")
 
 // X Axis Label
 d3.select("svg").append("text")
-      .text("W/L %")
-    .attr("x", 0)
-    .attr("y", 400);
+      .text("Season (Year)")
+    .attr("x", 400)
+    .attr("y", 720);
 
 // Y Axis Label
 d3.select("svg").append("text")
-      .text("Season (Year)")
-    .attr("x", 500)
-    .attr("y", 950);
+      .text("W/L %")
+    .attr("x", 0)
+    .attr("y", 400);
 
 // Add circles
 d3.select('svg').append("g")
@@ -149,7 +149,7 @@ d3.select('svg').append("g")
 // Annotation Text
 d3.select("svg").append("text")
       .text("Michael Jordan is drafted.")
-          .attr("transform", "translate(50, 50)")
+          .attr("transform", "translate(50, 0)")
     .attr("x", x(new Date(parseInt("1984"),0)))
     .attr("y", 620);
     
@@ -157,7 +157,7 @@ d3.select("svg").append("text")
 d3.select("svg").append("line")
     .style("stroke", "black")
     .style("stroke-width", 1)
-    .attr("transform", "translate(100, 50)")
+    .attr("transform", "translate(100, 15)")
     .attr("x1", x(new Date(parseInt("1984"),0)))
     .attr("y1", 395)
     .attr("x2", x(new Date(parseInt("1984"),0)))
@@ -168,7 +168,7 @@ d3.select("svg").append("line")
 d3.select("svg").append("line")
     .style("stroke", "red")
     .style("stroke-dasharray", 10)
-    .attr("transform", "translate(100, 50)")
+    .attr("transform", "translate(100, 20)")
     .attr("x1", 0)
     .attr("y1", y(0.500))
     .attr("x2", 900)

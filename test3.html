@@ -197,6 +197,13 @@ d3.select("svg").append("line")
     .attr("y1", y(0.500))
     .attr("x2", width)
     .attr("y2", y(0.500));
+
+// Annotation Text for Years
+d3.select("svg").append("text")
+      .text("1998 - 2003")
+    .style("font-size","50px")
+    .attr("x", 550)
+    .attr("y", 50);
 }
 
 </script>

@@ -89,12 +89,12 @@ var y = d3.scaleLinear()
 
 // Add X Axis
 d3.select("svg").append("g")
-      .attr("transform", "translate(100, 750)")
+      .attr("transform", "translate(100, 720)")
       .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
 
 // Add Y Axis
 d3.select("svg").append("g")
-    .attr("transform", "translate(100,50)")
+    .attr("transform", "translate(100,20)")
     .call(d3.axisLeft(y).tickFormat(function (d){
     return d3.format(".3f")(d);}));
 

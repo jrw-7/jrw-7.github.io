@@ -2,7 +2,7 @@
 
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <style>
-circle {fill: lightblue; stroke: black;} 
+circle {stroke: black;} 
 
 #tooltip {
     position: absolute;			
@@ -60,8 +60,8 @@ function filterCriteria(d) {
 }
 
 // Set the dimensions and margins of the graph
-var width = 800,
-    height = 800;
+var width = 650,
+    height = 650;
 
 // Define X Axis 
 var x = d3.scaleTime()
@@ -70,31 +70,31 @@ var x = d3.scaleTime()
 
 // Define Y axis
 var y = d3.scaleLinear()
-      .domain([0, 0.9])
+      .domain([0.1, 0.9])
       .range([ height, 0 ]);
 
 // Add X Axis
 d3.select("svg").append("g")
-      .attr("transform", "translate(100,850)")
+      .attr("transform", "translate(100, 670)")
       .call(d3.axisBottom(x).tickFormat(d => d.getFullYear()));
 
 // Add Y Axis
 d3.select("svg").append("g")
-    .attr("transform", "translate(100,50)")
+    .attr("transform", "translate(100,20)")
     .call(d3.axisLeft(y).tickFormat(function (d){
     return d3.format(".3f")(d);}));
 
 // X Axis Label
 d3.select("svg").append("text")
-      .text("W/L %")
-    .attr("x", 0)
-    .attr("y", 400);
+      .text("Season (Year)")
+    .attr("x", 400)
+    .attr("y", 720);
 
 // Y Axis Label
 d3.select("svg").append("text")
-      .text("Season (Year)")
-    .attr("x", 500)
-    .attr("y", 950);
+      .text("W/L %")
+    .attr("x", 0)
+    .attr("y", 400);
 
 // Add circles
 d3.select('svg').append("g")
@@ -103,6 +103,10 @@ d3.select('svg').append("g")
   .data(data)
   .enter()
   .append('circle')
+    .attr("fill", function(d) {
+        if(d.Season > 1997) {
+            return "darkblue";
+        } else { return "white";}})
     .attr("cx", function(d) { return x(new Date(parseInt(d.Season),0)); })
     .attr("cy", function(d) { return y(d.Win_Loss_Percent); })
     .attr("r", function(d) { return 6; })
@@ -133,7 +137,7 @@ d3.select('svg').append("g")
 // Annotation Text
 d3.select("svg").append("text")
       .text("Michael Jordan is drafted.")
-          .attr("transform", "translate(50, 50)")
+          .attr("transform", "translate(50, 15)")
     .attr("x", x(new Date(parseInt("1984"),0)))
     .attr("y", 620);
     
@@ -141,7 +145,7 @@ d3.select("svg").append("text")
 d3.select("svg").append("line")
     .style("stroke", "black")
     .style("stroke-width", 1)
-    .attr("transform", "translate(100, 50)")
+    .attr("transform", "translate(100, 15)")
     .attr("x1", x(new Date(parseInt("1984"),0)))
     .attr("y1", 395)
     .attr("x2", x(new Date(parseInt("1984"),0)))
@@ -150,7 +154,7 @@ d3.select("svg").append("line")
 // Annotation Text  
 d3.select("svg").append("text")
       .text("Win first NBA Championship")
-      .attr("transform", "translate(50, 50)")
+      .attr("transform", "translate(50, 60)")
     .attr("x", x(new Date(parseInt("1990"),0)))
     .attr("y", 550);
 
@@ -169,7 +173,7 @@ d3.select("svg").append("text")
     .attr("transform", "translate(50, 50)")
       .text("MJ and Coach Jackson leave.")
     .attr("x", x(new Date(parseInt("1998"),0)))
-    .attr("y", 750);
+    .attr("y", 610);
 
 // Annotation Line
 d3.select("svg").append("line")
@@ -179,19 +183,18 @@ d3.select("svg").append("line")
     .attr("x1", x(new Date(parseInt("1998"),0)))
     .attr("y1", y(.260))
     .attr("x2", x(new Date(parseInt("1998"),0)))
-    .attr("y2", 740);
+    .attr("y2", 600);
 
-// X Axis Label
-d3.select("svg").append("text")
-      .text("W/L %")
-    .attr("x", 0)
-    .attr("y", 350);
 
-// Y Axis Label
-d3.select("svg").append("text")
-      .text("Season (Year)")
-    .attr("x", 500)
-    .attr("y", 900);
+// 0.500 Win/Loss Reference Line
+d3.select("svg").append("line")
+    .style("stroke", "red")
+    .style("stroke-dasharray", 10)
+    .attr("transform", "translate(100, 20)")
+    .attr("x1", 0)
+    .attr("y1", y(0.500))
+    .attr("x2", width)
+    .attr("y2", y(0.500));
 }
 
 </script>

@@ -166,10 +166,10 @@ d3.select('svg').append("g")
 // Annotation Text
 d3.select("svg").append("text")
       .text("Michael Jordan is drafted.")
-          .attr("transform", "translate(50, 15)")
+          .attr("transform", "translate(90, 15)")
     .attr("x", x(new Date(parseInt("1984"),0)))
     .attr("y", 620);
-    
+
 // Annotation Line
 d3.select("svg").append("line")
     .style("stroke", "black")
@@ -179,13 +179,30 @@ d3.select("svg").append("line")
     .attr("y1", 395)
     .attr("x2", x(new Date(parseInt("1984"),0)))
     .attr("y2", 600);
+
+// Annotation Text  
+d3.select("svg").append("text")
+      .text("Coach Jackson is hired.")
+      .attr("transform", "translate(90, 60)")
+    .attr("x", x(new Date(parseInt("1989"),0)))
+    .attr("y", 450);
+
+// Annotation Line
+d3.select("svg").append("line")
+    .style("stroke", "black")
+    .style("stroke-width", 1)
+    .attr("transform", "translate(100, 50)")
+    .attr("x1", x(new Date(parseInt("1989"),0)))
+    .attr("y1", y(.671))
+    .attr("x2", x(new Date(parseInt("1989"),0)))
+    .attr("y2", 440);
  
 // Annotation Text  
 d3.select("svg").append("text")
-      .text("Win first NBA Championship")
-      .attr("transform", "translate(50, 60)")
+      .text("Wins first NBA Championship")
+      .attr("transform", "translate(90, 60)")
     .attr("x", x(new Date(parseInt("1990"),0)))
-    .attr("y", 550);
+    .attr("y", 400);
 
 // Annotation Line
 d3.select("svg").append("line")
@@ -195,13 +212,13 @@ d3.select("svg").append("line")
     .attr("x1", x(new Date(parseInt("1990"),0)))
     .attr("y1", y(.744))
     .attr("x2", x(new Date(parseInt("1990"),0)))
-    .attr("y2", 540);
+    .attr("y2", 390);
 
 // 0.500 Win/Loss Reference Line
 d3.select("svg").append("line")
     .style("stroke", "red")
     .style("stroke-dasharray", 10)
-    .attr("transform", "translate(100, 20)")
+    .attr("transform", "translate(90, 20)")
     .attr("x1", 0)
     .attr("y1", y(0.500))
     .attr("x2", width)
